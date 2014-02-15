@@ -5,6 +5,38 @@
 " License: Same as Vim itself (see :help license)
 "
 "
+if !exists('g:ino_lib_path')
+	let g:ino_lib_path = '/usr/local/lib/python2.6/site-packages/'
+endif
+
+execute '!export PYTHONPATH=$PYHONPATH:'.g:ino_lib_path.'; ino build --help'
+
+
+if !has('python')
+	echo "Error: Arduino.vim requires vim compiled with +python"
+		finish
+	endif
+
+let s:path = expand('<sfile>:p:h')
+
+" Setup for Python library imports.
+python << endpython
+import sys
+import os
+import vim
+
+ino_lib_path = '/usr/local/lib/python2.6/site-packages/'
+sys.path.insert(0, ino_lib_path)
+
+script_path = vim.eval('s:path')
+lib_path = os.path.join(script_path, '..')
+sys.path.insert(0, lib_path)
+
+import ino
+
+endpython
+
+"
 " ============
 " Installation
 " ============
