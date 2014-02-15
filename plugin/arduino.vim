@@ -9,6 +9,10 @@ if !exists('g:ino_lib_path')
 	let g:ino_lib_path = '/usr/local/lib/python2.6/site-packages/'
 endif
 
+if !exists('g:arduino_workspace')
+	let g:arduino_workspace = '/Users/edward/Documents/Arduino'
+endif
+
 " ============
 " Installation
 " ============
@@ -25,9 +29,26 @@ function! arduino#install()
 	execute '!sudo easy_install-2.7 configobj jinja2 pyserial'
 endfunction
 
-" Help
+" ==================
+"  Help 
+" ==================
+
+" Main Help
 function! arduino#help()
+	execute '!export PYTHONPATH=$PYHONPATH:'.g:ino_lib_path.'; ino --help'
+endfunction
+
+" Build Help
+function! arduino#buildhelp()
 	execute '!export PYTHONPATH=$PYHONPATH:'.g:ino_lib_path.'; ino build --help'
+endfunction
+
+" ==================
+"  Editing Source
+" ==================
+
+function! arduino#workspace()
+	execute ':e '.g:arduino_workspace
 endfunction
 
 " ==================
