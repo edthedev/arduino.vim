@@ -36,6 +36,8 @@ endfunction
 "             sudo touch /System/Library/Extensions
 
 
+" execute '!export PYTHONPATH=$PYHONPATH:'.g:ino_lib_path
+
 " ==================
 "  Help 
 " ==================
@@ -71,14 +73,15 @@ endfunction
 function! arduino#build()
 	let s:project_path = expand('%:p:h')
 	" echom 'Project path is '.s:project_path
-	execute '!cd '.s:project_path.'; ino build'
+	execute '!export PYTHONPATH=$PYHONPATH:'.g:ino_lib_path.'; cd '.s:project_path.'; ino build'
+	" execute '!cd '.s:project_path.'; ino build'
 endfunction
 
 " ProTip: Upload after you build. 
 function! arduino#upload()
 	let s:project_path = expand('%:p:h')
 	" echom 'Project path is '.s:project_path
-	execute '!cd '.s:project_path.'; ino upload'
+	execute '!export PYTHONPATH=$PYHONPATH:'.g:ino_lib_path.'; cd '.s:project_path.'; ino upload'
 endfunction
 
 
