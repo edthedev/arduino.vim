@@ -16,8 +16,14 @@ function! arduino#install()
     " echom 'Mac users will need XCode installed to provide "make".'
     echom 'Python2 is required for InoTool. '
     " execute '!cd /tmp/ino; env python2 setup.py install --root / --prefix /usr/local --exec-prefix /usr/local'
-    execute '!cd /tmp/ino; sudo python setup.py install --root / --prefix /usr/local --exec-prefix /usr/local'
+    execute '!cd /tmp/ino; sudo python /tmp/ino/setup.py install --root / --prefix /usr/local --exec-prefix /usr/local'
 	echom 'InoTool install complete.'
+endfunction
+
+" Help
+function! arduino#help()
+    echom 'Installing InoTool...'
+	execute '!ino --help'
 endfunction
 
 " ==================
