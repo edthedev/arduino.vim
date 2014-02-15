@@ -30,6 +30,12 @@ function! arduino#install()
 	execute '!sudo easy_install-2.7 configobj jinja2 pyserial'
 endfunction
 
+" Solution for 'Programmer not responding on OSX 10.9
+"     cd /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns
+"         sudo mv AppleUSBFTDI.kext AppleUSBFTDI.disabled
+"             sudo touch /System/Library/Extensions
+
+
 " ==================
 "  Help 
 " ==================
@@ -53,18 +59,28 @@ function! arduino#workspace()
 endfunction
 
 " TODO: In progress...Init a new Ino directory
-function! ino#init()
+" Do this on the command line, for now.
+function! arduino#init()
 	let s:project_path = expand('%:p:h')
 	execute ':e '.g:arduino_workspace
 	execute '!mkdir -p '.s:project_path.'/'.a:project_name
 	execute '!cd '.s:project_path.'/'.a:project_name.'; ino init'
 endfunction
 
+" ProTip: Build only works after the first time you ino init
 function! arduino#build()
 	let s:project_path = expand('%:p:h')
 	" echom 'Project path is '.s:project_path
 	execute '!cd '.s:project_path.'; ino build'
 endfunction
+
+" ProTip: Upload after you build. 
+function! arduino#upload()
+	let s:project_path = expand('%:p:h')
+	" echom 'Project path is '.s:project_path
+	execute '!cd '.s:project_path.'; ino upload'
+endfunction
+
 
 " ==================
 " Keyboard Mappings
@@ -79,6 +95,7 @@ if g:arduino_map_keys
     " Install 
 
     :nnoremap <leader>ab :call arduino#build()<Cr>
+    :nnoremap <leader>au :call arduino#upload()<Cr>
     :nnoremap <leader>ai :call arduino#install()<Cr>
     :nnoremap <leader>aw :call arduino#workspace()<Cr>
 endif
