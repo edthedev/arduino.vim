@@ -4,7 +4,8 @@
 " Version: 0.0.1
 " License: Same as Vim itself (see :help license)
 "
-"
+let s:path = expand('<sfile>:p:h')
+
 if !exists('g:ino_lib_path')
 	let g:ino_lib_path = '/usr/local/lib/python2.6/site-packages/'
 endif
@@ -39,7 +40,7 @@ function! arduino#help()
 endfunction
 
 " Build Help
-function! arduino#buildhelp()
+function! arduino#help()
 	execute '!export PYTHONPATH=$PYHONPATH:'.g:ino_lib_path.'; ino build --help'
 endfunction
 
@@ -49,6 +50,20 @@ endfunction
 
 function! arduino#workspace()
 	execute ':e '.g:arduino_workspace
+endfunction
+
+" TODO: In progress...Init a new Ino directory
+function! ino#init()
+	let s:project_path = expand('%:p:h')
+	execute ':e '.g:arduino_workspace
+	execute '!mkdir -p '.s:project_path.'/'.a:project_name
+	execute '!cd '.s:project_path.'/'.a:project_name.'; ino init'
+endfunction
+
+function! arduino#build()
+	let s:project_path = expand('%:p:h')
+	" echom 'Project path is '.s:project_path
+	execute '!cd '.s:project_path.'; ino build'
 endfunction
 
 " ==================
@@ -63,5 +78,7 @@ endif
 if g:arduino_map_keys
     " Install 
 
+    :nnoremap <leader>ab :call arduino#build()<Cr>
     :nnoremap <leader>ai :call arduino#install()<Cr>
+    :nnoremap <leader>aw :call arduino#workspace()<Cr>
 endif
