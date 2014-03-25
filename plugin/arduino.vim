@@ -64,9 +64,11 @@ endfunction
 " Do this on the command line, for now.
 function! arduino#init()
 	let s:project_path = expand('%:p:h')
-	execute ':e '.g:arduino_workspace
-	execute '!mkdir -p '.s:project_path.'/'.a:project_name
-	execute '!cd '.s:project_path.'/'.a:project_name.'; ino init'
+	" let s:project_name = expand('%:r')
+	" execute ':e '.g:arduino_workspace
+	" execute '!mkdir -p '.s:project_path.'/'.s:project_name
+	" execute '!cd '.s:project_path.'/'.s:project_name.'; ino init'
+	execute '!cd '.s:project_path.'; ino init'
 endfunction
 
 " ProTip: Build only works after the first time you ino init
@@ -84,6 +86,21 @@ function! arduino#upload()
 	execute '!export PYTHONPATH=$PYHONPATH:'.g:ino_lib_path.'; cd '.s:project_path.'; ino upload'
 endfunction
 
+if !exists('g:arduino_library_path')
+	let g:arduino_library_path = '~/Documents/Arduino/libraries'
+endif
+
+function! arduino#open_library()
+	" Add the library folder as a buffer.
+	execute ':badd '.g:arduino_library_path
+	" List buffers to remind us it worked.
+	execute ':buffers'
+endfunction
+
+" Recognize ino and pde files as C++.
+autocmd BufNewFile,BufReadPost *.ino,*.pde set filetype=cpp
+
+" Commands
 
 " ==================
 " Keyboard Mappings
@@ -99,6 +116,7 @@ if g:arduino_map_keys
 
     :nnoremap <leader>ab :call arduino#build()<Cr>
     :nnoremap <leader>au :call arduino#upload()<Cr>
-    :nnoremap <leader>ai :call arduino#install()<Cr>
+    :nnoremap <leader>ai :call arduino#init()<Cr>
+    :nnoremap <leader>al :call arduino#open_library()<Cr>
     :nnoremap <leader>aw :call arduino#workspace()<Cr>
 endif
