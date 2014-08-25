@@ -14,6 +14,14 @@ if !exists('g:arduino_workspace')
 	let g:arduino_workspace = '/Users/edward/Documents/Arduino'
 endif
 
+if !exists('g:arduino_compile_command')
+	leg g:arduino_compile_command = 'ino build'
+endif
+
+if !exists('g:arduino_upload_command')
+	leg g:arduino_upload_command = 'ino upload'
+endif
+
 " ============
 " Installation
 " ============
@@ -73,6 +81,7 @@ endfunction
 
 " ProTip: Build only works after the first time you ino init
 function! arduino#build()
+	echo "Remember to ino init first."
 	let s:project_path = expand('%:p:h')
 	" echom 'Project path is '.s:project_path
 	execute '!export PYTHONPATH=$PYHONPATH:'.g:ino_lib_path.'; cd '.s:project_path.'; ino build'
@@ -113,9 +122,11 @@ endif
 
 if g:arduino_map_keys
     " Install 
-
-    :nnoremap <leader>ab :call arduino#build()<Cr>
-    :nnoremap <leader>au :call arduino#upload()<Cr>
+	
+	" Compile
+    :nnoremap <leader>ac :call arduino#build()<Cr>
+	" Deploy
+    :nnoremap <leader>ad :call arduino#upload()<Cr>
     :nnoremap <leader>ai :call arduino#init()<Cr>
     :nnoremap <leader>al :call arduino#open_library()<Cr>
     :nnoremap <leader>aw :call arduino#workspace()<Cr>
